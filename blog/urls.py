@@ -1,3 +1,6 @@
+from django.conf.urls import url
+
+from blog import views
 
 urlpatterns = [
     url(r'^nazanin_ce419.herokuapp.com/blog/posts', views.posts_view),
