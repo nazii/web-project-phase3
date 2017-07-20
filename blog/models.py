@@ -6,13 +6,13 @@ from django.db import models
 
 class Weblog(models.Model):
     user = models.ForeignKey(User)
-    weblog_name = models.CharField()
+    weblog_name = models.CharField(max_length=20)
     is_default = models.BooleanField()
 
 
 class Post(models.Model):
-    title = models.CharField()
-    writer_name = models.CharField()
+    title = models.CharField(max_length=20)
+    writer_name = models.CharField(max_length=20)
     datetime = models.DateField()
     summary = models.TextField()
     text = models.TextField()

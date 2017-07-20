@@ -1,5 +1,6 @@
 from django import forms
 
+
 class RegisterForm(forms.Form):
     username = forms.CharField(required=True)
     first_name = forms.CharField(required=True)

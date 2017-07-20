@@ -1,26 +1,22 @@
-#
-# def login_required(request, *args, **kwargs):
-#     token = request.META.get["X-Token"]
-#     try:
-#         tokenObj = Token.get(token = token)
-#     except tokenObj.DoesNotExist:
-#         raise exceptions.AuthenticationFailed('No such user')
-#
-#     return (tokenObj, None)
-#
-from pip import exceptions
-
+from django.http import HttpResponse
+import json
 from user.models import Token
 
 
-def login_required():
+def login_required(function=None):
     def _decorator(view_func):
         def _wrapped_view(request, *args, **kwargs):
-            token = request.META.get["X-Token"]
+            token = request.META.get("HTTP_X_TOKEN")
             try:
-                tokenObj = Token.get(token=token)
-            except tokenObj.DoesNotExist:
-                raise exceptions.AuthenticationFailed('No such user')
-            args["user_param"] = tokenObj.user
+                tokenObj = Token.objects.get(token=token)
+            except Token.DoesNotExist:
+                return HttpResponse(json.dumps({"status" : -1}),
+                                    content_type="application/json")
+            args = args + (tokenObj.user,)
+            return view_func(request, *args, **kwargs)
         return _wrapped_view
-    return _decorator
+
+    if function is None:
+        return _decorator
+    else:
+        return _decorator(function)

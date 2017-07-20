@@ -4,7 +4,7 @@ from user import views
 
 
 urlpatterns = [
-    url(r'^nazanin_ce419.herokuapp.com/user/register', views.register_view),
-    url(r'^nazanin_ce419.herokuapp.com/user/login', views.login_view)
+    url(r'^register$', views.register_view),
+    url(r'^login$', views.login_view)
 
 ]

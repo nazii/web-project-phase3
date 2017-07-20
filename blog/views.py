@@ -1,14 +1,16 @@
 import datetime
-from django.core.serializers import json
+import json
 from django.http import HttpResponse
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
 from blog.decorators import login_required
 from blog.models import Weblog, Post, Comment
 
 
 @login_required
-def default_weblog_view(user_param):
+def default_weblog_view(request, user_param):
     default_web = Weblog.objects.get(is_default=True, user=user_param)
     return HttpResponse(json.dumps({"id": default_web.id}),
                         content_type="application/json")
@@ -41,6 +43,24 @@ def post_item_view(request, user_param):
                                 content_type="application/json")
         else:
             return HttpResponse(json.dumps({"status": -1}), content_type="application/json")
+    elif request.method == "POST":
+        title = request.POST.get("title")
+        summary = request.POST.get("summary")
+        text = request.POST.get("text")
+        time = datetime.datetime.now()
+        weblog_num = request.POST.get("web_number")
+        web = Weblog.objects.get(name=weblog_num, user=user_param)
+        post = Post.objects.create(title=title, summary=summary, text=text, time=time, web=web)
+        post.save()
+        post_json = {
+            'title': title,
+            'summary': summary,
+            'text': text,
+            'datetime': datetime
+        }
+
+        return HttpResponse(json.dumps({"status": 0, "post": post_json}),
+                            content_type="application/json")
 
 
 @login_required
@@ -65,7 +85,7 @@ def add_comment_view(request, user_param):
     time = datetime.datetime.now()
     web = Weblog.objects.get(name=web_number, user=user_param)
     post = Post.objects.get(weblog=web, id=post_id)
-    cm = Comment.objects.create_object(text, time, post)
+    cm = Comment.objects.create(text=text, time=time, post=post)
     cm.save()
     cm_json = {
         'datetime': datetime,
@@ -73,25 +93,3 @@ def add_comment_view(request, user_param):
     }
     return HttpResponse(json.dumps({"status": 0, "comment": cm_json}),
                         content_type="application/json")
-
-
-@login_required
-def add_post_view(request, user_param):
-    if request.method == "POST":
-        title = request.POST.get("title")
-        summary = request.POST.get("summary")
-        text = request.POST.get("text")
-        time = datetime.datetime.now()
-        weblog_num = request.POST.get("web_number")
-        web = Weblog.objects.get(name=weblog_num, user=user_param)
-        post = Post.objects.create_object(title, summary, text, time, web)
-        post.save()
-        post_json = {
-            'title': title,
-            'summary': summary,
-            'text': text,
-            'datetime': datetime
-        }
-
-        return HttpResponse(json.dumps({"status": 0, "post": post_json}),
-                            content_type="application/json")
