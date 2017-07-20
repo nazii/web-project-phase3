@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'webphase3',
         'USER': 'webuser',
         'PASSWORD': 'nazanin3675',
-        'HOST': 'hphamid.ir',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }

@@ -4,10 +4,13 @@ from django.db import models
 
 # Create your models here.
 
+
 class Weblog(models.Model):
     user = models.ForeignKey(User)
     weblog_name = models.CharField(max_length=20)
     is_default = models.BooleanField()
+    def weblog_user(self):
+        return self.user.username
 
 
 class Post(models.Model):
