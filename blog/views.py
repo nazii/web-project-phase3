@@ -1,26 +1,35 @@
 import datetime
 import json
-from django.http import HttpResponse
 
+from django.http import HttpResponse
 # Create your views here.
-from django.views.decorators.csrf import csrf_exempt
+import logging
 
 from blog.decorators import login_required
 from blog.models import Weblog, Post, Comment
+
+logger = logging.getLogger('django')
 
 
 @login_required
 def default_weblog_view(request, user_param):
     default_web = Weblog.objects.get(is_default=True, user=user_param)
+    if default_web is None:
+        logger.error('user has no default weblog')
     return HttpResponse(json.dumps({"id": default_web.id}),
                         content_type="application/json")
 
 
 @login_required
-def posts_view(request, web_number, count, offset, user_param):
-    s = int(count)
-    e = int(offset) + s
+def posts_view(request, user_param):
+    s = int(request.GET.get("count"))
+    e = int(request.GET.get("offset"))
+    web_number = request.GET.get("web_number")
     web = Weblog.objects.get(name=web_number, user=user_param)
+
+    if web is None:
+        logger.error("could not find web")
+
     list = Post.objects.filter(user=user_param, weblog=web).order_by("-creation_date")[s:e]
     to_return = []
     if list is not None:
@@ -42,6 +51,7 @@ def post_item_view(request, user_param):
                                             "text": post.text}),
                                 content_type="application/json")
         else:
+
             return HttpResponse(json.dumps({"status": -1}), content_type="application/json")
     elif request.method == "POST":
         title = request.POST.get("title")
