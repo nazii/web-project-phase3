@@ -1,0 +1,69 @@
+image: gitlab/dind:latest
+variables:
+  GIT_STRATEGY: clone
+  DOCKER_DRIVER: overlay
+
+makeDocker:
+  stage: build
+  before_script:
+    - which git || ( apt-get install git)
+    - which aws || ( apt-get update && apt-get install -y python python-pip && pip install awscli )
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - git checkout "$CI_BUILD_REF_NAME"
+    - git fetch origin 'refs/tags/*:refs/tags/*'
+  artifacts:
+    paths:
+      - ./versionInfo.log
+  script:
+    - ./scripts/version.sh  > versionInfo.log
+    - version=`cat versionInfo.log`
+    - echo "$CI_REGISTRY_IMAGE:$version"
+    - docker build -t "$CI_REGISTRY_IMAGE:$version" .
+    - docker push "$CI_REGISTRY_IMAGE:$version"
+    ## make aws container registry and push image
+    ## WARNING AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are required
+    - awsImageTag=`cat versionInfo.log`
+    - loginExpr=`aws ecr get-login --region "$AWS_DEFAULT_REGION"`
+    - $loginExpr
+    - projectPath=`echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]'`
+    - registryAddress="$AWS_REGISTRY_ADDRESS/$projectPath"
+    - aws ecr create-repository --repository-name "$projectPath" || ( echo "already exists" )
+    - imageName="$registryAddress:$awsImageTag"
+    - echo "$imageName"
+    - docker tag "$CI_REGISTRY_IMAGE:$version" "$imageName"
+    - docker push "$imageName"
+
+deployToServer:
+  stage: deploy
+  dependencies:
+    - makeDocker
+  before_script:
+    # Install ssh-agent if not already installed, it is required by Docker.
+    # (change apt-get to yum if you use a CentOS-based image)
+    - 'which ssh-agent || ( apt-get update && apt-get install openssh-client )'
+
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    - ssh-add <(echo "$SSH_MAIN")
+
+    # For Docker builds disable host key checking. Be aware that by adding that
+    # you are suspectible to man-in-the-middle attacks.
+    # WARNING: Use this only with the Docker executor, if you use it with shell
+    # you will overwrite your user's SSH config.
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerinit ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - which aws || ( apt-get update && apt-get install -y python python-pip && pip install awscli )
+
+  script:
+    - awsImageTag=`cat versionInfo.log`
+    - loginExpr=`aws ecr get-login --region "$AWS_DEFAULT_REGION"`
+    - projectPath=`echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]'`
+    - registryAddress="$AWS_REGISTRY_ADDRESS/$projectPath"
+    - imageName="$registryAddress:$awsImageTag"
+    - ssh -o StrictHostKeyChecking=no root@$MAIN_ADDRESS "$loginExpr && bash -s" < ./scripts/deployToServer.sh  "$imageName"
+  only:
+    - master
+#  when: manual
+  environment: abrServer
