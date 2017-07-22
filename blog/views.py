@@ -22,8 +22,8 @@ def default_weblog_view(request, user_param):
 
 @login_required
 def posts_view(request, user_param):
-    s = int(request.GET.get("count"))
-    e = int(request.GET.get("offset"))
+    s = int(request.GET.get("offset"))
+    e = int(request.GET.get("count")) + s
     web_number = request.GET.get("web_number")
     # web = Weblog.objects.get(id=web_number, user=user_param)
     #
@@ -44,7 +44,7 @@ def post_item_view(request, user_param):
     if request.method == "GET":
         post_id = request.GET.get("id")
         web_number = request.GET.get("web_number")
-        web = Weblog.objects.get(name=web_number, user=user_param)
+        web = Weblog.objects.get(id=web_number, user=user_param)
         post = Post.objects.get(weblog=web, id=post_id)
         if post is not None:
             return HttpResponse(json.dumps({"writer": post.writer_name, "title": post.title,
@@ -54,19 +54,20 @@ def post_item_view(request, user_param):
 
             return HttpResponse(json.dumps({"status": -1}), content_type="application/json")
     elif request.method == "POST":
+        user_id = user_param.id
         title = request.POST.get("title")
         summary = request.POST.get("summary")
         text = request.POST.get("text")
         time = datetime.datetime.now()
         weblog_num = request.POST.get("web_number")
-        web = Weblog.objects.get(name=weblog_num, user=user_param)
-        post = Post.objects.create(title=title, summary=summary, text=text, time=time, web=web)
+        web = Weblog.objects.get(id=weblog_num, user__id=user_id)
+        post = Post.objects.create(title=title, summary=summary, text=text, datetime=time, weblog=web)
         post.save()
         post_json = {
             'title': title,
             'summary': summary,
             'text': text,
-            'datetime': datetime
+            'datetime': time.timestamp()
         }
 
         return HttpResponse(json.dumps({"status": 0, "post": post_json}),
