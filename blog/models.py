@@ -18,7 +18,7 @@ class Weblog(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=20)
     writer_name = models.CharField(max_length=20)
-    datetime = models.DateField()
+    datetime = models.FloatField()
     summary = models.TextField()
     text = models.TextField()
     weblog = models.ForeignKey(Weblog)
@@ -26,5 +26,5 @@ class Post(models.Model):
 
 class Comment(models.Model):
     text = models.TextField()
-    datetime = models.DateField()
+    datetime = models.FloatField()
     post = models.ForeignKey(Post)

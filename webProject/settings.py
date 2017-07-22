@@ -79,8 +79,8 @@ WSGI_APPLICATION = 'webProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'webphase3',
-        'USER': 'webuser',
+        'NAME': 'webproject',
+        'USER': 'webprojectuser',
         'PASSWORD': 'nazanin3675',
         'HOST': 'localhost',
         'PORT': '',

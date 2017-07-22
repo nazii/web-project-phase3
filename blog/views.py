@@ -34,7 +34,8 @@ def posts_view(request, user_param):
     to_return = []
     if list is not None:
         for post in list:
-            to_return.append({"title": post.title, "summary": post.summary, "writer": post.writer_name})
+            to_return.append({"title": post.title, "summary": post.summary,
+                              "writer": post.writer_name, "datetime": post.datetime})
     return HttpResponse(json.dumps({"posts": to_return}),
                         content_type="application/json")
 
@@ -48,7 +49,7 @@ def post_item_view(request, user_param):
         post = Post.objects.get(weblog=web, id=post_id)
         if post is not None:
             return HttpResponse(json.dumps({"writer": post.writer_name, "title": post.title,
-                                            "text": post.text}),
+                                            "text": post.text, "datetime": post.datetime}),
                                 content_type="application/json")
         else:
 
@@ -58,7 +59,7 @@ def post_item_view(request, user_param):
         title = request.POST.get("title")
         summary = request.POST.get("summary")
         text = request.POST.get("text")
-        time = datetime.datetime.now()
+        time = datetime.datetime.now().timestamp()
         weblog_num = request.POST.get("web_number")
         web = Weblog.objects.get(id=weblog_num, user__id=user_id)
         post = Post.objects.create(title=title, summary=summary, text=text, datetime=time, weblog=web)
@@ -67,7 +68,7 @@ def post_item_view(request, user_param):
             'title': title,
             'summary': summary,
             'text': text,
-            'datetime': time.timestamp()
+            'datetime': time
         }
 
         return HttpResponse(json.dumps({"status": 0, "post": post_json}),
@@ -77,9 +78,9 @@ def post_item_view(request, user_param):
 @login_required
 def comments_view(request, user_param):
     post_id = request.GET.get("post_id")
-    s = int(request.GET.get("count"))
-    e = int(request.GET.get("offset"))
-    list = Comment.objects.filter(user=user_param, post__id=post_id).order_by("-creation_date")[s:e]
+    s = int(request.GET.get("offset"))
+    e = int(request.GET.get("count")) + s
+    list = Comment.objects.filter(post__id=post_id).order_by("datetime")[s:e]
     to_return = []
     if list is not None:
         for cm in list:
@@ -92,12 +93,12 @@ def comments_view(request, user_param):
 def add_comment_view(request, user_param):
     post_id = request.POST.get("post_id")
     text = request.POST.get("text")
-    time = datetime.datetime.now()
-    post = Post.objects.get( id=post_id)
-    cm = Comment.objects.create(text=text, time=time, post=post)
+    time = datetime.datetime.now().timestamp()
+    post = Post.objects.get(id=post_id)
+    cm = Comment.objects.create(text=text, datetime=time, post=post)
     cm.save()
     cm_json = {
-        'datetime': datetime,
+        'datetime': time,
         'text': text
     }
     return HttpResponse(json.dumps({"status": 0, "comment": cm_json}),
