@@ -1,5 +1,5 @@
 FROM python:3.5
-MAINTAINER Abrstudio
+MAINTAINER Nazanin
 
 RUN apt-get update && apt-get install -y \
 	git \
@@ -19,8 +19,9 @@ RUN pip install -r /home/docker/code/requirements.txt
 COPY ./config/nginx-app.conf /etc/nginx/sites-available/default
 COPY ./config/supervisor-app.conf /etc/supervisor/conf.d/
 COPY ./ /home/docker/code/
-RUN cd /home/docker/code; mv ./bazicharge/settingsDeploy.py ./bazicharge/settings.py; python manage.py collectstatic --noinput;
+RUN cd /home/docker/code; mv ./webProjectPhase3/settingsDeploy.py ./webProjectPhase3/settings.py; python manage.py collectstatic --noinput;
 VOLUME ["/var/log/uwsgi/"]
 
 EXPOSE 80
-CMD ["supervisord", "-n"];
+#CMD ["supervisord", "-n"];
+CMD ["/home/docker/code/scripts/entryPoint.sh", "/home/docker/code/manage.py"];

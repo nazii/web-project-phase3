@@ -6,7 +6,7 @@ fi;
 
 registryImageAddress=$1;
 
-serviceName="baziChargeWebsite";
+serviceName="webProjectPhase3";
 
 docker pull "$registryImageAddress"
 if docker service inspect "$serviceName" ; then
@@ -14,5 +14,5 @@ if docker service inspect "$serviceName" ; then
     docker service update --with-registry-auth --image "$registryImageAddress" "$serviceName";
 else
     ##create service and run it!
-    docker service create --with-registry-auth --network mysql --replicas 1 --name "$serviceName" --publish 8081:80/tcp "$registryImageAddress";
+    docker service create --network postgresql --replicas 1 --name "$serviceName" --publish 8080:80/tcp "$registryImageAddress";
 fi;
