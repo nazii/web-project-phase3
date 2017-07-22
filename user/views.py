@@ -27,10 +27,12 @@ def login_view(request):
                 return HttpResponse(json.dumps({"status": 0, "token": token_string}),
                                     content_type="application/json")
             else:
+                print("user not found")
                 return HttpResponse(json.dumps({"status": -1}),
                                     content_type="application/json")
         return HttpResponse(json.dumps({"status": -1}),
                             content_type="application/json")
+    print("form not valid")
     return HttpResponse(json.dumps({"status": -1}),
                         content_type="application/json")
 
@@ -46,6 +48,7 @@ def register_view(request):
             email = register_form.cleaned_data['email']
             old_user = User.objects.filter(Q(username=username))
             if old_user is not None and len(old_user) > 0:
+                print("user is not none")
                 return HttpResponse(json.dumps({"status": -1}),
                                     content_type="application/json")
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
@@ -54,6 +57,7 @@ def register_view(request):
             weblog.save()
 
             return HttpResponse(json.dumps({"status": 0}), content_type="application/json")
+
     return HttpResponse(json.dumps({"status": -1}),
                         content_type="application/json")
 

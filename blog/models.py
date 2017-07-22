@@ -9,6 +9,8 @@ class Weblog(models.Model):
     user = models.ForeignKey(User)
     weblog_name = models.CharField(max_length=20)
     is_default = models.BooleanField()
+    post_words = models.TextField(default="")
+
     def weblog_user(self):
         return self.user.username
 
