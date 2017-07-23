@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b42eb4cc-9f12-488d-9282-41439157b25c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webProjectPhase3/settingsDeploy.py" afterPath="$PROJECT_DIR$/webProjectPhase3/settingsDeploy.py" />
     </list>
     <ignored path="webProject.iws" />
@@ -105,7 +106,7 @@
         <entry file="file://$PROJECT_DIR$/webProjectPhase3/settingsDeploy.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="200">
-              <caret line="82" column="25" lean-forward="false" selection-start-line="82" selection-start-column="25" selection-end-line="82" selection-end-column="25" />
+              <caret line="82" column="26" lean-forward="false" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -263,7 +264,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="FullScreen" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="setting&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;weblo&#9;null&#9;null&#10;se&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;req&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/requirements.txt&#10;admin&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/admin.py&#10;model&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/models.py&#10;MODEL&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/models.py&#10;sett&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;deco&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/decorators.py&#10;models&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/models.py&#10;token&#9;null&#9;null&#10;view&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/views.py&#10;decora&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/decorators.py" />
+    <property name="SearchEverywhereHistoryKey" value="re&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/requirements.txt&#10;setting&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;weblo&#9;null&#9;null&#10;se&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;req&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/requirements.txt&#10;admin&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/admin.py&#10;model&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/models.py&#10;MODEL&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/models.py&#10;sett&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/webProject/settings.py&#10;deco&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/decorators.py&#10;models&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/user/models.py&#10;token&#9;null&#9;null&#10;view&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/views.py&#10;decora&#9;FILE&#9;file:///home/bezanin/bezanin/courses/web/nazanin (2)/nazanin/webProject/blog/decorators.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
   </component>
@@ -688,14 +689,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -927,10 +920,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-900">
+          <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webProjectPhase3/settingsDeploy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
-          <caret line="82" column="25" lean-forward="false" selection-start-line="82" selection-start-column="25" selection-end-line="82" selection-end-column="25" />
+          <caret line="82" column="26" lean-forward="false" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
           <folding />
         </state>
       </provider>

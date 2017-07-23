@@ -79,8 +79,8 @@ WSGI_APPLICATION = 'webProjectPhase3.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'postgres1',
+        'USER': 'postgres1',
         'PASSWORD': 'iOON3QDdEmXwHzNi5zMn',
         'HOST': 'postgresql',
         'PORT': '',
