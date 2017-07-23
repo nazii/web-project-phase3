@@ -2,13 +2,13 @@ image: gitlab/dind:latest
 variables:
   GIT_STRATEGY: clone
   DOCKER_DRIVER: overlay
+  Registery_Address: nazaninannabestani/webprojectphase3
 
 makeDocker:
   stage: build
   before_script:
     - which git || ( apt-get install git)
-    - which aws || ( apt-get update && apt-get install -y python python-pip && pip install awscli )
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker login -u $Hub_User -p $Hub_Pass
     - git checkout "$CI_BUILD_REF_NAME"
     - git fetch origin 'refs/tags/*:refs/tags/*'
   artifacts:
@@ -17,20 +17,10 @@ makeDocker:
   script:
     - ./scripts/version.sh  > versionInfo.log
     - version=`cat versionInfo.log`
-    - echo "$CI_REGISTRY_IMAGE:$version"
-    - docker build -t "$CI_REGISTRY_IMAGE:$version" .
-    - docker push "$CI_REGISTRY_IMAGE:$version"
-    ## make aws container registry and push image
-    ## WARNING AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are required
-    - awsImageTag=`cat versionInfo.log`
-    - loginExpr=`aws ecr get-login --region "$AWS_DEFAULT_REGION"`
-    - $loginExpr
-    - projectPath=`echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]'`
-    - registryAddress="$AWS_REGISTRY_ADDRESS/$projectPath"
-    - aws ecr create-repository --repository-name "$projectPath" || ( echo "already exists" )
-    - imageName="$registryAddress:$awsImageTag"
+    - imageTag=`cat versionInfo.log`
+    - imageName="$Registery_Address:$imageTag"
     - echo "$imageName"
-    - docker tag "$CI_REGISTRY_IMAGE:$version" "$imageName"
+    - docker build -t "$imageName" .
     - docker push "$imageName"
 
 deployToServer:
@@ -54,16 +44,12 @@ deployToServer:
     # you will overwrite your user's SSH config.
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerinit ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - which aws || ( apt-get update && apt-get install -y python python-pip && pip install awscli )
 
   script:
-    - awsImageTag=`cat versionInfo.log`
-    - loginExpr=`aws ecr get-login --region "$AWS_DEFAULT_REGION"`
-    - projectPath=`echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]'`
-    - registryAddress="$AWS_REGISTRY_ADDRESS/$projectPath"
-    - imageName="$registryAddress:$awsImageTag"
-    - ssh -o StrictHostKeyChecking=no root@$MAIN_ADDRESS "$loginExpr && bash -s" < ./scripts/deployToServer.sh  "$imageName"
+    - imageTag=`cat versionInfo.log`
+    - imageName="$Registery_Address:$imageTag"
+    - ssh -o StrictHostKeyChecking=no root@$MAIN_ADDRESS "bash -s" < ./scripts/deployToServer.sh  "$imageName"
   only:
     - master
 #  when: manual
-  environment: abrServer
+  environment: deployment
