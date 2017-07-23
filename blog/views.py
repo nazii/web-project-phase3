@@ -34,7 +34,7 @@ def posts_view(request, user_param):
     to_return = []
     if list is not None:
         for post in list:
-            to_return.append({"title": post.title, "summary": post.summary,
+            to_return.append({"title": post.title, "summary": post.summary,"id" : post.id,
                               "writer": post.writer_name, "datetime": post.datetime})
     return HttpResponse(json.dumps({"posts": to_return}),
                         content_type="application/json")
