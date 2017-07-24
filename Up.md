@@ -8,5 +8,5 @@
 اجرا به این صورت است که اول چک می‌کند آیا داکرایمیجی وجود دارد از قبل یانه. اگر بود آن را نگه می‌دارد و داکر ایمیج جدید را جایگزین آن کرده و deployToServer.sh را اجرا می‌کند در غیر این صورت همین آخرین ورژن را اجرا می‌کند.
 با این سیستم دیگر برای آپدیت شدن کدها بعد از تغییرات نیاز به کاری نیست و auto deploy است و فقط کافیست پروژه را روی gitlab پوش کنیم بقیه کار هارا gitlab-ci می‌کند!
 نکته :‌ پروژه را روی یک repository به صورت پابلیک در آدرس زیر در gitlab گذاشته ام :
-https://gitlab.com/nazanin_annabestani/webProjectPhase3
 </p>
+https://gitlab.com/nazanin_annabestani/webProjectPhase3
